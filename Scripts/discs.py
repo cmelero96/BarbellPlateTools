@@ -1,18 +1,10 @@
 from itertools import combinations
-import disc_setup
-
-print('-------------------------------------------')
-print(' All units are designed to be in KILOGRAMS')
-print('-------------------------------------------')
-print()
-
-
-#weight_dict = setup()
+import tools
 
 while(True):
-    disc_setup.print_screen()
+    tools.print_screen()
     try:
-        disc_setup.modes[int(input('Please choose your action: '))]()
+        tools.modes[int(input('Please choose your action: '))]()
     except KeyError:
         print('Command not available!')
     except ValueError:
