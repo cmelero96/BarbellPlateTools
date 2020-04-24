@@ -14,6 +14,28 @@ bar = 0
 d = Dictlist()
 file = None
 
+
+def reset():
+    global bar
+    bar = 0
+    global d
+    d = Dictlist()
+    open(filename, "w+").close()
+    
+
+def load_data():
+    with open(filename) as f:
+        from ast import literal_eval
+        for line in f:
+            fields = line.strip().split(";")
+            if (fields[1] == ''):
+                global bar
+                bar = fields[0]
+            else:
+                aux = ast.literal_eval(fields[1])
+                d[float(fields[0])] = aux
+
+
 def is_setup():
     if bar != 0:
         return True
@@ -121,15 +143,23 @@ def print_weights():
             print(k, 'kg  \t-->\t', v)
     
 
+def close_program():
+    from time import sleep
+    print('GOODBYE! :)')
+    sleep(1)
+    from sys import exit
+    exit(0)
 
-modes = {0: lambda: exit(), 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
+
+modes = {0: close_program, 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
 
 def print_screen():
     if bar == 0:
         pass
     if is_setup():
         global modes
-        modes = {0: lambda: exit(), 1: setup, 2: print_weights, 3: lambda: print('Sadly, not yet available :(')}
+        modes[2] = print_weights
+        modes[3] = lambda: print('Sadly, not yet available :(')
         print('--------------------------------------------------')
         print('--                                              --')
         print('--               BARBELL DISCS TOOLS            --')
@@ -155,22 +185,3 @@ def print_screen():
         print('--                                              --')
         print('--   0: Exit              (Units are in KG)     --')
         print('--------------------------------------------------')
-
-def load_data():
-    with open(filename) as f:
-        import ast
-        for line in f:
-            fields = line.strip().split(";")
-            if (fields[1] == ''):
-                global bar
-                bar = fields[0]
-            else:
-                aux = ast.literal_eval(fields[1])
-                d[float(fields[0])] = aux
-
-def reset():
-    global bar
-    bar = 0
-    global d
-    d = Dictlist()
-    open(filename, "w+").close()
