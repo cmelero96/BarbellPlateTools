@@ -104,6 +104,7 @@ def setup():
 
 def print_weights():
     if is_setup():
+        print()
         print('-----------------------------------------------')
         print('Total weight  \t | \t Plates on each side')
         print('-----------------------------------------------')
