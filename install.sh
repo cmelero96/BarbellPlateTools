@@ -1,1 +1,1 @@
-pyinstaller --onefile --name BarbellPlateTools.exe --distpath dist --specpath dist discs.py
+pyinstaller --onefile --name BarbellPlateTools.exe --distpath dist --specpath dist scripts\\discs.py
