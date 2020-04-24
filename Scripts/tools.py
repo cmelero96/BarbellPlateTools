@@ -15,9 +15,12 @@ d = Dictlist()
 file = None
 
 def is_setup():
+    if bar != 0:
+        return True
+    
     try:
-        with open(filename) as f:
-            return len(f.readline())!=0
+        load_data()
+        return bar!=0
     except FileNotFoundError:
         return False
 
@@ -117,6 +120,8 @@ def print_weights():
 modes = {0: lambda: exit(), 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
 
 def print_screen():
+    if bar == 0:
+        pass
     if is_setup():
         global modes
         modes = {0: lambda: exit(), 1: setup, 2: print_weights, 3: lambda: print('Sadly, not yet available :(')}
@@ -146,5 +151,13 @@ def print_screen():
         print('--   0: Exit              (Units are in KG)     --')
         print('--------------------------------------------------')
 
-def read_savefile():
-    file = open("data.dat", "w+")
+def load_data():
+    with open(filename) as f:
+        for line in f:
+            fields = line.strip().split(";")
+            print(fields)
+            if (fields[1] != ''):
+                d[fields[0]] = fields[1]
+            else:
+                global bar
+                bar = fields[0]
