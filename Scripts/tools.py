@@ -103,7 +103,7 @@ def calc_plates(target):
     return sorted(options)[-1]
 
 def print_target(target, w):
-    print('|nTarget: ' + str(target) + unit + '. Put on each side:')
+    print('\nTarget: ' + str(target) + unit + '. Put on each side:')
     for i in w:
         print('  ' + str(i) + unit + ' plate')
 
@@ -156,13 +156,23 @@ def setup():
     microplates = input('Do you have microplates? (Y/N) ')
     if microplates.upper().startswith('Y'):
         for plate in microplates_set:
-            response = input('  Do you have a ' + str(plate) + unit + ' microplate? (Y/N) ')
-            if response.upper().startswith('Y'):
-                disc_list.append(plate)
+                valid = False
+                while (not valid):
+                    amount = input('  How many PAIRS of ' + str(plate) + unit + ' microplates do you have? ')
+                    try:
+                        for i in range(int(amount)):
+                            disc_list.append(plate)
+                        valid = True
+                    except ValueError:
+                        print("'" + str(amount) + "' is not a valid number.")
 
-    if len(disc_list) == 0:
+    if len(disc_list) > 20:
+        print('Calculating combinations... Please be wary than large sets of discs take more time.')
+    elif len(disc_list) > 0:
+        print('Calculating combinations...')
+    else:
         print('Seems you only have an empty bar!')
-
+        
     global weights_aux
     for i in range(1,len(disc_list)+1):
         weights_aux += set(itertools.combinations(disc_list, i))
@@ -172,9 +182,9 @@ def setup():
         weights.add(2*sum(i)+bar_weight)
 
     weights = sorted(weights, reverse=True)
+    print('  Setup complete!')
 
     save()
-    print('Setup complete!')
 
 
 def print_plates():
