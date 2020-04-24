@@ -1,6 +1,7 @@
 from itertools import combinations
 import tools
 
+
 while(True):
     tools.print_screen()
     try:
@@ -8,6 +9,7 @@ while(True):
     except KeyError:
         print('Command not available!')
     except ValueError:
-        print('Invalid operation.')
+        print('That\'s not a number...')
     except KeyboardInterrupt:
-        pass
+        print('Please, don\'t be rude and use command \'0\' to exit')
+    print('\n')

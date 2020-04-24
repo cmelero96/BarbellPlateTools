@@ -9,10 +9,14 @@ class Dictlist(dict):
         if value not in self[key]:
             self[key].append(value)
 
+bar = 0
+d = Dictlist()
+is_setup = False
 
 def setup():
     valid = False
     while (not valid):
+        global bar
         bar = input('How much does your bar weigh? ')
         try:
             bar = float(bar)
@@ -57,7 +61,6 @@ def setup():
                 discs[plate] = 0
 
     disc_list = []
-    d = Dictlist()
 
     for k,v in discs.items():
         for i in range(v):
@@ -74,25 +77,28 @@ def setup():
                 d[sum(j)*2 + bar] = j
 
     print('\nSetup finished.')
+    global is_setup
     is_setup = True
-    return d
+    return bar, d, is_setup
 
 
 def print_weights():
-    print('-----------------------------------------------')
-    print('Total weight  \t | \t Plates on each side')
-    print('-----------------------------------------------')
-    print(str(bar), 'kg  \t-->\t Just the bar!')
-    for k,v in sorted(d.items()):
-        print(k, 'kg  \t-->\t', v)
+    if is_setup:
+        print('-----------------------------------------------')
+        print('Total weight  \t | \t Plates on each side')
+        print('-----------------------------------------------')
+        print(str(bar), 'kg  \t-->\t Just the bar!')
+        for k,v in sorted(d.items()):
+            print(k, 'kg  \t-->\t', v)
+    
 
 
-modes = {0: quit, 1: setup, 2: print_weights}
-is_setup = False
-
+modes = {0: quit, 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
 
 def print_screen():
     if is_setup:
+        global modes
+        modes = {0: quit, 1: setup, 2: print_weights, 3: lambda: print('Sadly, not yet available :(')}
         print('--------------------------------------------------')
         print('--                                              --')
         print('--               BARBELL DISCS TOOLS            --')
