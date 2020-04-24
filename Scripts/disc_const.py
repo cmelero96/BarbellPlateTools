@@ -1,0 +1,9 @@
+plates_kg = (25, 20, 15, 10, 5, 2.5, 1.25)
+micro_kg = (0.5, 0.75, 1, 1.5, 2)
+plates_lb = (45, 35, 25, 10, 5, 2.5)
+micro_lb = (0.5, 1, 1.25, 1.5, 2, 4)
+bar_str = 'BAR'
+discs_str = 'DISCS'
+weights_str = 'WEIGHTS'
+aux_str = 'AUX'
+filename = 'data.dat'
