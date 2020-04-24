@@ -11,5 +11,5 @@ while(True):
     except ValueError:
         print('That\'s not a number...')
     except KeyboardInterrupt:
-        print('Please, don\'t be rude and use command \'0\' to exit')
+        print('Please, only do keyboard interrupts if strictly necessary. I may break :(')
     print('\n')

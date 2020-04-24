@@ -9,11 +9,29 @@ class Dictlist(dict):
         if value not in self[key]:
             self[key].append(value)
 
+filename = "data.dat"
 bar = 0
 d = Dictlist()
-is_setup = False
+file = None
+
+def is_setup():
+    try:
+        with open(filename) as f:
+            return len(f.readline())!=0
+    except FileNotFoundError:
+        return False
 
 def setup():
+    if is_setup():
+        check = input('Do you really want to override your previous data? (Y/N) ')
+        if not check.upper().startswith('Y'):
+            print('I thought so! :)')
+            return
+        else:
+            print('It never hurts to ask! :)\n')
+    
+    global file
+    file = open(filename, "w+")
     valid = False
     while (not valid):
         global bar
@@ -26,13 +44,14 @@ def setup():
         except ValueError:
             print("'" + str(bar) + "' is not a valid number.")
 
+    file.write(str(bar)+';\n')
     microplates = input('Do you have microplates? (Y/N) ')
     if microplates.upper().startswith('Y'):
         microplates = True
-        print('    Program configured WITH microplates')
+        print('Program configured WITH microplates')
     else:
         microplates = False
-        print('    Program configured WITHOUT microplates')
+        print('Program configured WITHOUT microplates')
 
     weights_available = (25, 20, 15, 10, 5, 2.5, 1.25)
     microplates_available = (0.5, 0.75, 1, 1.5, 2)
@@ -72,18 +91,19 @@ def setup():
         discs_per_side = tuple(combinations(disc_list, i))
         for j in discs_per_side:
             if len(j) == 1:
-                d[sum(j)*2 + bar] = j[0]
+                total_weight = sum(j)*2 + bar
+                d[total_weight] = j[0]
+                file.write(str(total_weight)+';'+str(j[0])+'\n')
             else:
                 d[sum(j)*2 + bar] = j
+                file.write(str(total_weight)+';'+str(j)+'\n')
+    file.close()
 
     print('\nSetup finished.')
-    global is_setup
-    is_setup = True
-    return bar, d, is_setup
 
 
 def print_weights():
-    if is_setup:
+    if is_setup():
         print('-----------------------------------------------')
         print('Total weight  \t | \t Plates on each side')
         print('-----------------------------------------------')
@@ -93,12 +113,12 @@ def print_weights():
     
 
 
-modes = {0: quit, 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
+modes = {0: lambda: exit(), 1: setup, 2: lambda: print('Please, setup first'), 3: lambda: print('Please, setup first')}
 
 def print_screen():
-    if is_setup:
+    if is_setup():
         global modes
-        modes = {0: quit, 1: setup, 2: print_weights, 3: lambda: print('Sadly, not yet available :(')}
+        modes = {0: lambda: exit(), 1: setup, 2: print_weights, 3: lambda: print('Sadly, not yet available :(')}
         print('--------------------------------------------------')
         print('--                                              --')
         print('--               BARBELL DISCS TOOLS            --')
@@ -124,3 +144,6 @@ def print_screen():
         print('--                                              --')
         print('--   0: Exit              (Units are in KG)     --')
         print('--------------------------------------------------')
+
+def read_savefile():
+    file = open("data.dat", "w+")
