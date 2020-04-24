@@ -32,7 +32,10 @@ def setup():
             return
         else:
             print('It never hurts to ask! :)\n')
-    
+            reset()
+
+    global d
+    d = Dictlist()
     global file
     file = open(filename, "w+")
     valid = False
@@ -98,7 +101,8 @@ def setup():
                 d[total_weight] = j[0]
                 file.write(str(total_weight)+';'+str(j[0])+'\n')
             else:
-                d[sum(j)*2 + bar] = j
+                total_weight = sum(j)*2 + bar
+                d[total_weight] = j
                 file.write(str(total_weight)+';'+str(j)+'\n')
     file.close()
 
@@ -112,6 +116,7 @@ def print_weights():
         print('Total weight  \t | \t Plates on each side')
         print('-----------------------------------------------')
         print(str(bar), 'kg  \t-->\t Just the bar!')
+        import pprint
         for k,v in sorted(d.items()):
             print(k, 'kg  \t-->\t', v)
     
@@ -153,11 +158,19 @@ def print_screen():
 
 def load_data():
     with open(filename) as f:
+        import ast
         for line in f:
             fields = line.strip().split(";")
-            print(fields)
-            if (fields[1] != ''):
-                d[fields[0]] = fields[1]
-            else:
+            if (fields[1] == ''):
                 global bar
                 bar = fields[0]
+            else:
+                aux = ast.literal_eval(fields[1])
+                d[float(fields[0])] = aux
+
+def reset():
+    global bar
+    bar = 0
+    global d
+    d = Dictlist()
+    open(filename, "w+").close()
